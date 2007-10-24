@@ -1,0 +1,135 @@
+--- libmikmod-3.1.11/drivers/drv_esd.c.esd	2004-08-04 05:04:58.990630968 +0200
++++ libmikmod-3.1.11/drivers/drv_esd.c	2004-08-04 05:05:32.940469808 +0200
+@@ -127,20 +127,19 @@
+ /* I hope to have this function integrated into libesd someday...*/
+ static ssize_t esd_writebuf(int fd,const void *buffer,size_t count)
+ {
+-	ssize_t start=0;
++	ssize_t res;
+ 
+-	while (start<count) {
+-		ssize_t res;
++	res=write(fd,(char*)buffer,count);
++	if (res<0)
++		switch (errno) {
++			case EAGAIN:
++				return 0;
++			case EPIPE:
++				/* connection lost */
++				return -1-res;
++		}
+ 
+-		res=write(fd,(char*)buffer+start,count-start);
+-		if (res<0) {
+-			/* connection lost */
+-			if (errno==EPIPE)
+-				return -1-start;
+-		} else
+-			start+=res;
+-	}
+-	return start;
++	return res;
+ }
+ 
+ static void ESD_CommandLine(CHAR *cmdline)
+@@ -193,6 +192,7 @@
+ 			_mm_errno=MMERR_OPENING_AUDIO;
+ 			return 1;
+ 		}
++		fcntl(sndfd, F_SETFL, fcntl(sndfd, F_GETFL) | O_NONBLOCK);
+ 	} else {
+ 		_mm_errno=MMERR_OUT_OF_MEMORY;
+ 		return 1;
+@@ -234,19 +234,22 @@
+ #endif
+ }
+ 
+-static void ESD_Update_internal(int count)
++static void ESD_Update(void)
+ {
+ 	static time_t losttime;
++	int done;
+ 
+ 	if (sndfd>=0) {
+-		if (esd_writebuf(sndfd,audiobuffer,count)<0) {
++		done=esd_writebuf(sndfd,audiobuffer,ESD_BUF_SIZE);
++		if (done<0) {
+ 			/* if we lost our connection with esd, clean up and work as the
+ 			   nosound driver until we can reconnect */
+ 			esd_closestream(sndfd);
+ 			sndfd=-1;
+ 			signal(SIGPIPE,SIG_DFL);
+ 			losttime=time(NULL);
+-		}
++		} else
++			VC_WriteBytes(audiobuffer,done);
+ 	} else {
+ 		/* an alarm would be better, but then the library user could not use
+ 		   alarm(2) himself... */
+@@ -255,31 +258,32 @@
+ 			/* Attempt to reconnect every 5 seconds */
+ 			if (!(SETENV))
+ 				if ((sndfd=esd_playstream(format,md_mixfreq,espeaker,"libmikmod"))>=0) {
+-					VC_SilenceBytes(audiobuffer,ESD_BUF_SIZE);
+-					esd_writebuf(sndfd,audiobuffer,ESD_BUF_SIZE);
++					fcntl(sndfd, F_SETFL, fcntl(sndfd, F_GETFL) | O_NONBLOCK);
++					done=esd_writebuf(sndfd,audiobuffer,ESD_BUF_SIZE);
++					if(done>0)
++						VC_SilenceBytes(audiobuffer,done);
+ 				}
+ 		}
+ 	}
+ }
+ 
+-static void ESD_Update(void)
+-{
+-	ESD_Update_internal(VC_WriteBytes(audiobuffer,ESD_BUF_SIZE));
+-}
+-
+ static void ESD_Pause(void)
+ {
+-	ESD_Update_internal(VC_SilenceBytes(audiobuffer,ESD_BUF_SIZE));
++	VC_SilenceBytes(audiobuffer,ESD_BUF_SIZE);
+ }
+ 
+ static BOOL ESD_PlayStart(void)
+ {
++	int done;
++
+ 	if (sndfd<0)
+-		if (!(SETENV))
++		if (!(SETENV)) {
+ 			if ((sndfd=esd_playstream(format,md_mixfreq,espeaker,"libmikmod"))<0) {
+ 				_mm_errno=MMERR_OPENING_AUDIO;
+ 				return 1;
+ 			}
++			fcntl(sndfd, F_SETFL, fcntl(sndfd, F_GETFL) | O_NONBLOCK);
++		}
+ 	/* since the default behaviour of SIGPIPE on most Unices is to kill the
+ 	   program, we'll prefer handle EPIPE ourselves should the esd die - recent
+ 	   esdlib use a do-nothing handler, which prevents us from receiving EPIPE,
+@@ -287,18 +291,20 @@
+ 	signal(SIGPIPE,SIG_IGN);
+ 
+ 	/* silence buffers */
+-	VC_SilenceBytes(audiobuffer,ESD_BUF_SIZE);
+-	esd_writebuf(sndfd,audiobuffer,ESD_BUF_SIZE);
++	done=esd_writebuf(sndfd,audiobuffer,ESD_BUF_SIZE);
++	VC_SilenceBytes(audiobuffer,done);
+ 
+ 	return VC_PlayStart();
+ }
+ 
+ static void ESD_PlayStop(void)
+ {
++	int done;
++
+ 	if (sndfd>=0) {
+ 		/* silence buffers */
+-		VC_SilenceBytes(audiobuffer,ESD_BUF_SIZE);
+-		esd_writebuf(sndfd,audiobuffer,ESD_BUF_SIZE);
++		done=esd_writebuf(sndfd,audiobuffer,ESD_BUF_SIZE);
++		VC_SilenceBytes(audiobuffer,done);
+ 
+ 		signal(SIGPIPE,SIG_DFL);
+ 	}

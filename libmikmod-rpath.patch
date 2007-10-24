@@ -1,0 +1,278 @@
+diff -up mikmod-3.2.2-beta1/libmikmod-3.1.11/libmikmod/Makefile.in.rpath mikmod-3.2.2-beta1/libmikmod-3.1.11/libmikmod/Makefile.in
+--- libmikmod-3.1.11/libmikmod/Makefile.in.rpath	2007-09-19 09:46:49.000000000 +0200
++++ libmikmod-3.1.11/libmikmod/Makefile.in	2007-09-19 09:51:45.000000000 +0200
+@@ -30,20 +30,20 @@ MKINSTALLDIRS=${top_srcdir}/mkinstalldir
+ 
+ DEFS=@DEFS@
+ CFLAGS=@CFLAGS@ -Dunix
+-COMPILE=$(LIBTOOL) --silent --mode=compile $(CC) $(DEFS) $(CFLAGS) -I$(top_srcdir)/include -I$(top_builddir) -I$(top_builddir)/include -DMIKMOD_H=$(top_srcdir)/include/mikmod.h
++COMPILE=$(CC) $(DEFS) $(CFLAGS) -I$(top_srcdir)/include -I$(top_builddir) -I$(top_builddir)/include -DMIKMOD_H=$(top_srcdir)/include/mikmod.h -fPIC
+ 
+-LIB = libmikmod.la
++LIB = libmikmod.a
+ OBJ = $(LIBOBJS) $(DLOBJS) \
+-      drv_AF.lo drv_aix.lo drv_alsa.lo drv_esd.lo drv_hp.lo drv_nos.lo \
+-      drv_oss.lo drv_pipe.lo drv_raw.lo drv_sam9407.lo drv_sgi.lo \
+-      drv_stdout.lo drv_sun.lo drv_ultra.lo drv_wav.lo \
+-      load_669.lo load_amf.lo load_dsm.lo load_far.lo load_gdm.lo load_it.lo  \
+-      load_imf.lo load_m15.lo load_med.lo load_mod.lo load_mtm.lo load_okt.lo \
+-      load_s3m.lo load_stm.lo load_stx.lo load_ult.lo load_uni.lo load_xm.lo \
+-      mmalloc.lo mmerror.lo mmio.lo \
+-      mdriver.lo mdreg.lo mdulaw.lo mloader.lo mlreg.lo mlutil.lo mplayer.lo \
+-      munitrk.lo mwav.lo npertab.lo sloader.lo virtch.lo virtch2.lo \
+-      virtch_common.lo
++      drv_AF.o drv_aix.o drv_alsa.o drv_esd.o drv_hp.o drv_nos.o \
++      drv_oss.o drv_pipe.o drv_raw.o drv_sam9407.o drv_sgi.o \
++      drv_stdout.o drv_sun.o drv_ultra.o drv_wav.o \
++      load_669.o load_amf.o load_dsm.o load_far.o load_gdm.o load_it.o  \
++      load_imf.o load_m15.o load_med.o load_mod.o load_mtm.o load_okt.o \
++      load_s3m.o load_stm.o load_stx.o load_ult.o load_uni.o load_xm.o \
++      mmalloc.o mmerror.o mmio.o \
++      mdriver.o mdreg.o mdulaw.o mloader.o mlreg.o mlutil.o mplayer.o \
++      munitrk.o mwav.o npertab.o sloader.o virtch.o virtch2.o \
++      virtch_common.o
+ 
+ DIST_FILES = $(top_srcdir)/libmikmod/Makefile.in
+ 
+@@ -51,7 +51,10 @@ all:		$(LIB)
+ 
+ install:	$(LIB)
+ 	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
+-	$(LIBTOOL) --mode=install $(INSTALL) -m 755 $(LIB) $(DESTDIR)$(libdir)
++	$(INSTALL) -m 755 $(LIB) $(DESTDIR)$(libdir)
++	$(INSTALL) -m 755 libmikmod.so.2.0.4 $(DESTDIR)$(libdir)
++	cp -d libmikmod.so.2 $(DESTDIR)$(libdir)
++	cp -d libmikmod.so $(DESTDIR)$(libdir)
+ 
+ uninstall:	$(LIB)
+ 	$(LIBTOOL) --mode=uninstall rm -f $(DESTDIR)$(libdir)/$(LIB)
+@@ -72,171 +75,174 @@ distclean:	clean
+ 	rm -f Makefile
+ 
+ $(LIB): $(OBJ)
+-	$(LIBTOOL) --mode=link $(CC) -version-info 2:4:0 -o $@ $(OBJ) $(LIBRARY_LIB) -rpath $(DESTDIR)$(libdir)
++	$(AR) rcs $@ $(OBJ)
++	$(CC) -shared -Wl,-soname,libmikmod.so.2 -o libmikmod.so.2.0.4 $(OBJ)
++	ln -s libmikmod.so.2.0.4 libmikmod.so.2
++	ln -s libmikmod.so.2.0.4 libmikmod.so
+ 
+-dl_hpux.lo:	$(top_srcdir)/dlapi/dl_hpux.c \
++dl_hpux.o:	$(top_srcdir)/dlapi/dl_hpux.c \
+ 			$(top_srcdir)/dlapi/dlfcn.h
+ 	$(COMPILE) -c $(top_srcdir)/dlapi/dl_hpux.c
+ 
+-drv_AF.lo:	$(top_srcdir)/drivers/drv_AF.c \
++drv_AF.o:	$(top_srcdir)/drivers/drv_AF.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_AF.c
+-drv_aix.lo:	$(top_srcdir)/drivers/drv_aix.c \
++drv_aix.o:	$(top_srcdir)/drivers/drv_aix.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_aix.c
+-drv_alsa.lo:	$(top_srcdir)/drivers/drv_alsa.c \
++drv_alsa.o:	$(top_srcdir)/drivers/drv_alsa.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_alsa.c
+-drv_esd.lo:	$(top_srcdir)/drivers/drv_esd.c \
++drv_esd.o:	$(top_srcdir)/drivers/drv_esd.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_esd.c
+-drv_hp.lo:	$(top_srcdir)/drivers/drv_hp.c \
++drv_hp.o:	$(top_srcdir)/drivers/drv_hp.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_hp.c
+-drv_nos.lo:	$(top_srcdir)/drivers/drv_nos.c \
++drv_nos.o:	$(top_srcdir)/drivers/drv_nos.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_nos.c
+-drv_pipe.lo:	$(top_srcdir)/drivers/drv_pipe.c \
++drv_pipe.o:	$(top_srcdir)/drivers/drv_pipe.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_pipe.c
+-drv_oss.lo:	$(top_srcdir)/drivers/drv_oss.c \
++drv_oss.o:	$(top_srcdir)/drivers/drv_oss.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_oss.c
+-drv_raw.lo:	$(top_srcdir)/drivers/drv_raw.c \
++drv_raw.o:	$(top_srcdir)/drivers/drv_raw.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_raw.c
+-drv_sam9407.lo:	$(top_srcdir)/drivers/drv_sam9407.c \
++drv_sam9407.o:	$(top_srcdir)/drivers/drv_sam9407.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_sam9407.c
+-drv_sgi.lo:	$(top_srcdir)/drivers/drv_sgi.c \
++drv_sgi.o:	$(top_srcdir)/drivers/drv_sgi.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_sgi.c
+-drv_stdout.lo:	$(top_srcdir)/drivers/drv_stdout.c \
++drv_stdout.o:	$(top_srcdir)/drivers/drv_stdout.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_stdout.c
+-drv_sun.lo:	$(top_srcdir)/drivers/drv_sun.c \
++drv_sun.o:	$(top_srcdir)/drivers/drv_sun.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_sun.c
+-drv_ultra.lo:	$(top_srcdir)/drivers/drv_ultra.c \
++drv_ultra.o:	$(top_srcdir)/drivers/drv_ultra.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_ultra.c
+-drv_wav.lo:	$(top_srcdir)/drivers/drv_wav.c \
++drv_wav.o:	$(top_srcdir)/drivers/drv_wav.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/drivers/drv_wav.c
+ 
+-load_669.lo:	$(top_srcdir)/loaders/load_669.c \
++load_669.o:	$(top_srcdir)/loaders/load_669.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_669.c
+-load_amf.lo:	$(top_srcdir)/loaders/load_amf.c \
++load_amf.o:	$(top_srcdir)/loaders/load_amf.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_amf.c
+-load_dsm.lo:	$(top_srcdir)/loaders/load_dsm.c \
++load_dsm.o:	$(top_srcdir)/loaders/load_dsm.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_dsm.c
+-load_far.lo:	$(top_srcdir)/loaders/load_far.c \
++load_far.o:	$(top_srcdir)/loaders/load_far.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_far.c
+-load_gdm.lo:	$(top_srcdir)/loaders/load_gdm.c \
++load_gdm.o:	$(top_srcdir)/loaders/load_gdm.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_gdm.c
+-load_it.lo:	$(top_srcdir)/loaders/load_it.c \
++load_it.o:	$(top_srcdir)/loaders/load_it.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_it.c
+-load_imf.lo:	$(top_srcdir)/loaders/load_imf.c \
++load_imf.o:	$(top_srcdir)/loaders/load_imf.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_imf.c
+-load_m15.lo:	$(top_srcdir)/loaders/load_m15.c \
++load_m15.o:	$(top_srcdir)/loaders/load_m15.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_m15.c
+-load_med.lo:	$(top_srcdir)/loaders/load_med.c \
++load_med.o:	$(top_srcdir)/loaders/load_med.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_med.c
+-load_mod.lo:	$(top_srcdir)/loaders/load_mod.c \
++load_mod.o:	$(top_srcdir)/loaders/load_mod.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_mod.c
+-load_mtm.lo:	$(top_srcdir)/loaders/load_mtm.c \
++load_mtm.o:	$(top_srcdir)/loaders/load_mtm.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_mtm.c
+-load_okt.lo:	$(top_srcdir)/loaders/load_okt.c \
++load_okt.o:	$(top_srcdir)/loaders/load_okt.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_okt.c
+-load_s3m.lo:	$(top_srcdir)/loaders/load_s3m.c \
++load_s3m.o:	$(top_srcdir)/loaders/load_s3m.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_s3m.c
+-load_stm.lo:	$(top_srcdir)/loaders/load_stm.c \
++load_stm.o:	$(top_srcdir)/loaders/load_stm.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_stm.c
+-load_stx.lo:	$(top_srcdir)/loaders/load_stx.c \
++load_stx.o:	$(top_srcdir)/loaders/load_stx.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_stx.c
+-load_ult.lo:	$(top_srcdir)/loaders/load_ult.c \
++load_ult.o:	$(top_srcdir)/loaders/load_ult.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_ult.c
+-load_uni.lo:	$(top_srcdir)/loaders/load_uni.c \
++load_uni.o:	$(top_srcdir)/loaders/load_uni.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_uni.c
+-load_xm.lo:	$(top_srcdir)/loaders/load_xm.c \
++load_xm.o:	$(top_srcdir)/loaders/load_xm.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/loaders/load_xm.c
+ 
+-mmalloc.lo:	$(top_srcdir)/mmio/mmalloc.c \
++mmalloc.o:	$(top_srcdir)/mmio/mmalloc.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/mmio/mmalloc.c
+-mmerror.lo:	$(top_srcdir)/mmio/mmerror.c \
++mmerror.o:	$(top_srcdir)/mmio/mmerror.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/mmio/mmerror.c
+-mmio.lo:		$(top_srcdir)/mmio/mmio.c \
++mmio.o:		$(top_srcdir)/mmio/mmio.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/mmio/mmio.c
+ 
+-mdriver.lo:	$(top_srcdir)/playercode/mdriver.c \
++mdriver.o:	$(top_srcdir)/playercode/mdriver.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/mdriver.c
+-mdreg.lo:	$(top_srcdir)/playercode/mdreg.c \
++mdreg.o:	$(top_srcdir)/playercode/mdreg.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/mdreg.c
+-mdulaw.lo:	$(top_srcdir)/playercode/mdulaw.c \
++mdulaw.o:	$(top_srcdir)/playercode/mdulaw.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/mdulaw.c
+-mloader.lo:	$(top_srcdir)/playercode/mloader.c \
++mloader.o:	$(top_srcdir)/playercode/mloader.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/mloader.c
+-mlreg.lo:	$(top_srcdir)/playercode/mlreg.c \
++mlreg.o:	$(top_srcdir)/playercode/mlreg.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/mlreg.c
+-mlutil.lo:	$(top_srcdir)/playercode/mlutil.c \
++mlutil.o:	$(top_srcdir)/playercode/mlutil.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/mlutil.c
+-mplayer.lo:	$(top_srcdir)/playercode/mplayer.c \
++mplayer.o:	$(top_srcdir)/playercode/mplayer.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/mplayer.c
+-munitrk.lo:	$(top_srcdir)/playercode/munitrk.c \
++munitrk.o:	$(top_srcdir)/playercode/munitrk.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/munitrk.c
+-mwav.lo:		$(top_srcdir)/playercode/mwav.c \
++mwav.o:		$(top_srcdir)/playercode/mwav.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/mwav.c
+-npertab.lo:	$(top_srcdir)/playercode/npertab.c \
++npertab.o:	$(top_srcdir)/playercode/npertab.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/npertab.c
+-sloader.lo:	$(top_srcdir)/playercode/sloader.c \
++sloader.o:	$(top_srcdir)/playercode/sloader.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/sloader.c
+-virtch.lo:	$(top_srcdir)/playercode/virtch.c $(top_srcdir)/playercode/virtch_common.c \
++virtch.o:	$(top_srcdir)/playercode/virtch.c $(top_srcdir)/playercode/virtch_common.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/virtch.c
+-virtch2.lo:	$(top_srcdir)/playercode/virtch2.c $(top_srcdir)/playercode/virtch_common.c \
++virtch2.o:	$(top_srcdir)/playercode/virtch2.c $(top_srcdir)/playercode/virtch_common.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/virtch2.c
+-virtch_common.lo:	$(top_srcdir)/playercode/virtch_common.c \
++virtch_common.o:	$(top_srcdir)/playercode/virtch_common.c \
+ 			$(top_builddir)/include/mikmod.h $(top_srcdir)/include/mikmod_internals.h
+ 	$(COMPILE) -c $(top_srcdir)/playercode/virtch_common.c
+ 
+-strcasecmp.lo:	$(top_srcdir)/posix/strcasecmp.c
++strcasecmp.o:	$(top_srcdir)/posix/strcasecmp.c
+ 	$(COMPILE) -c $(top_srcdir)/posix/strcasecmp.c
+-strdup.lo:	$(top_srcdir)/posix/strdup.c
++strdup.o:	$(top_srcdir)/posix/strdup.c
+ 	$(COMPILE) -c $(top_srcdir)/posix/strdup.c
+-strstr.lo:	$(top_srcdir)/posix/strstr.c
++strstr.o:	$(top_srcdir)/posix/strstr.c
+ 	$(COMPILE) -c $(top_srcdir)/posix/strstr.c
+ 
+ 

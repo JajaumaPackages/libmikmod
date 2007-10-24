@@ -1,0 +1,54 @@
+diff --recursive --unified libmikmod-3.1.11/NEWS libmikmod-3.1.11-a/NEWS
+--- libmikmod-3.1.11/NEWS	2004-01-21 12:43:52.000000000 -0500
++++ libmikmod-3.1.11-a/NEWS	2004-06-04 08:24:26.000000000 -0400
+@@ -1,3 +1,17 @@
++Summary of changes between libmikmod 3.1.11 and libmikmod 3.1.11-a
++========================================================================
++libmikmod-3.1.11-a was released on 05/03/2004
++
++Most of my work and attention goes on the 3.2.x series, but I still receive
++occasional bug reports and patchs for the 3.1.11 version. There are not enough
++changes to make a full release, but many people may find this patch useful.
++
++BUGFIXES
++- libmikmod playback now works correcly on amd64 (type size problem)
++- fixed warning issued by automake >= 1.8
++- config.sub and config.guess updated
++
++
+ Summary of changes between libmikmod 3.1.10 and libmikmod 3.1.11 (Thiers):
+ ==========================================================================
+ 
+diff --recursive --unified libmikmod-3.1.11/include/mikmod.h.in libmikmod-3.1.11-a/include/mikmod.h.in
+--- libmikmod-3.1.11/include/mikmod.h.in	2004-01-21 12:43:53.000000000 -0500
++++ libmikmod-3.1.11-a/include/mikmod.h.in	2004-06-04 08:24:26.000000000 -0400
+@@ -20,7 +20,7 @@
+ 
+ /*==============================================================================
+ 
+-  $Id: mikmod.h.in,v 1.1.1.1 2004/01/21 01:36:35 raph Exp $
++  $Id: mikmod.h.in,v 1.2 2004/06/01 16:43:45 raph Exp $
+ 
+   MikMod sound library include file
+ 
+@@ -85,7 +85,7 @@
+ 
+ @DOES_NOT_HAVE_SIGNED@
+ 
+-#if defined(__arch64__) || defined(__alpha)
++#if defined(__arch64__) || defined(__alpha) || defined(__x86_64)
+ /* 64 bit architectures */
+ 
+ typedef signed char     SBYTE;      /* 1 byte, signed */
+diff --recursive --unified libmikmod-3.1.11/libmikmod.m4 libmikmod-3.1.11-a/libmikmod.m4
+--- libmikmod-3.1.11/libmikmod.m4	2004-01-21 12:43:53.000000000 -0500
++++ libmikmod-3.1.11-a/libmikmod.m4	2004-06-04 08:24:26.000000000 -0400
+@@ -8,7 +8,7 @@
+ dnl Test for libmikmod, and define LIBMIKMOD_CFLAGS, LIBMIKMOD_LIBS and
+ dnl LIBMIKMOD_LDADD
+ dnl
+-AC_DEFUN(AM_PATH_LIBMIKMOD,
++AC_DEFUN([AM_PATH_LIBMIKMOD],
+ [dnl 
+ dnl Get the cflags and libraries from the libmikmod-config script
+ dnl
