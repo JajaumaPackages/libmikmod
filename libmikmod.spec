@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.1.11
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -14,6 +14,7 @@ Patch1:  libmikmod-esd.patch
 Patch2:  libmikmod-64bit.patch
 Patch3:  libmikmod-strip-lib.patch
 Patch4:  libmikmod-rpath.patch
+Patch5:  libmikmod-multilib.patch
 
 %description
 libmikmod is a library used by the mikmod MOD music file player for
@@ -36,6 +37,7 @@ applications for mikmod.
 %patch2 -p1 -b .64bit
 %patch3 -p1 -b .lib-strip
 %patch4 -p1 -b .rpath
+%patch5 -p1 -b .multilib
 
 %build
 %configure
@@ -77,6 +79,9 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Wed Oct 24 2007 Jindrich Novy <jnovy@redhat.com> 3.1.11-3
+- add multilib patch
+
 * Tue Oct 23 2007 Jindrich Novy <jnovy@redhat.com> 3.1.11-2
 - update description
 - add smp_flags to make
