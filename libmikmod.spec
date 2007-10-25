@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.1.11
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -25,6 +25,8 @@ XM, ULT and IT.
 Group: Development/Libraries
 Summary: Header files and documentation for compiling mikmod applications
 Requires: %{name} = %{version}-%{release}
+Provides: mikmod-devel = 3.2.2-4
+Obsoletes: mikmod-devel < 3.2.2-4
 
 %description devel
 This package includes the header files you will need to compile
@@ -79,6 +81,9 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Thu Oct 25 2007 Jindrich Novy <jnovy@redhat.com> 3.1.11-4
+- virtually provide mikmod-devel
+
 * Wed Oct 24 2007 Jindrich Novy <jnovy@redhat.com> 3.1.11-3
 - add multilib patch
 
