@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.1.11
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -81,6 +81,10 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Thu Feb 14 2008 Jindrich Novy <jnovy@redhat.com> 3.1.11-5
+- fix rpath patch so that there are no undefined symbols in
+  libmikmod.so (#431745)
+
 * Thu Oct 25 2007 Jindrich Novy <jnovy@redhat.com> 3.1.11-4
 - virtually provide mikmod-devel
 

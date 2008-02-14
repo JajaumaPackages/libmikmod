@@ -52,7 +52,7 @@ diff -up mikmod-3.2.2-beta1/libmikmod-3.1.11/libmikmod/Makefile.in.rpath mikmod-
  $(LIB): $(OBJ)
 -	$(LIBTOOL) --mode=link $(CC) -version-info 2:4:0 -o $@ $(OBJ) $(LIBRARY_LIB) -rpath $(DESTDIR)$(libdir)
 +	$(AR) rcs $@ $(OBJ)
-+	$(CC) -shared -Wl,-soname,libmikmod.so.2 -o libmikmod.so.2.0.4 $(OBJ)
++	$(CC) -shared -Wl,-soname,libmikmod.so.2 -o libmikmod.so.2.0.4 -ldl $(OBJ)
 +	ln -s libmikmod.so.2.0.4 libmikmod.so.2
 +	ln -s libmikmod.so.2.0.4 libmikmod.so
  
