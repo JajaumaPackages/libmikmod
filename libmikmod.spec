@@ -1,20 +1,18 @@
 Summary: A MOD music file player library
 Name: libmikmod
-Version: 3.1.11
-Release: 5%{?dist}
+Version: 3.2.0
+Release: 1%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: esound-devel
 URL: http://mikmod.raphnet.net/
-Source0: http://mikmod.raphnet.net/files/libmikmod-%{version}.tar.gz
-# patch has been updated to ship only fuctional stuff
-Patch0:  http://mikmod.raphnet.net/files/libmikmod-%{version}-a.diff
+Source0: http://mikmod.raphnet.net/files/libmikmod-%{version}-beta2.tar.bz2
+Patch0:  libmikmod-64bit.patch
 Patch1:  libmikmod-esd.patch
-Patch2:  libmikmod-64bit.patch
-Patch3:  libmikmod-strip-lib.patch
-Patch4:  libmikmod-rpath.patch
-Patch5:  libmikmod-multilib.patch
+Patch2:  libmikmod-strip-lib.patch
+Patch3:  libmikmod-multilib.patch
+Patch4:  libmikmod-autoconf.patch
 
 %description
 libmikmod is a library used by the mikmod MOD music file player for
@@ -33,13 +31,12 @@ This package includes the header files you will need to compile
 applications for mikmod.
 
 %prep
-%setup -q
-%patch0 -p1
+%setup -q -n %{name}-%{version}-beta2
+%patch0 -p1 -b .64bit
 %patch1 -p1 -b .esd
-%patch2 -p1 -b .64bit
-%patch3 -p1 -b .lib-strip
-%patch4 -p1 -b .rpath
-%patch5 -p1 -b .multilib
+%patch2 -p1 -b .strip-lib
+%patch3 -p1 -b .multilib
+%patch4 -p1 -b .autoconf
 
 %build
 %configure
@@ -81,6 +78,10 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Fri Feb 15 2008 Jindrich Novy <jnovy@redhat.com> 3.2.0-1
+- update to libmikmod-3.2.0-beta2
+- fix playback on 64bit arches
+
 * Thu Feb 14 2008 Jindrich Novy <jnovy@redhat.com> 3.1.11-5
 - fix rpath patch so that there are no undefined symbols in
   libmikmod.so (#431745)
