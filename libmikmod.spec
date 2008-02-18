@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 1%{?dist}
+Release: 2.beta2%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -78,6 +78,15 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Mon Feb 18 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 3.2.0-2.beta2
+- Replace completely braindead (hint to author, drink coffee first, then code)
+  esd non blocking patch with one that actually works. This fixes using mikmod
+  with pulseaudio (bz 247865)
+- Note: this makes the 2 supported output devices oss and esd (and pulseaudio's
+  esd emulation) alsa is not supported, this requires a rewrite of the mikmod
+  alsa code which was written for alsa-0.5 and never updated for the new alsa
+  0.9/1.0 api
+
 * Fri Feb 15 2008 Jindrich Novy <jnovy@redhat.com> 3.2.0-1
 - update to libmikmod-3.2.0-beta2
 - fix playback on 64bit arches
