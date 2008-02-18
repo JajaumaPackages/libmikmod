@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 2.beta2%{?dist}
+Release: 3.beta2%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -13,6 +13,7 @@ Patch1:  libmikmod-esd.patch
 Patch2:  libmikmod-strip-lib.patch
 Patch3:  libmikmod-multilib.patch
 Patch4:  libmikmod-autoconf.patch
+Patch5:  libmikmod-info.patch
 
 %description
 libmikmod is a library used by the mikmod MOD music file player for
@@ -37,6 +38,7 @@ applications for mikmod.
 %patch2 -p1 -b .strip-lib
 %patch3 -p1 -b .multilib
 %patch4 -p1 -b .autoconf
+%patch5 -p1 -b .info
 
 %build
 %configure
@@ -78,6 +80,10 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Mon Feb 18 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 3.2.0-3.beta2
+- Fix MikMod_InfoLoader() and MikMod_InfoDriver() functions, fixing mikmod -n
+  output
+
 * Mon Feb 18 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 3.2.0-2.beta2
 - Replace completely braindead (hint to author, drink coffee first, then code)
   esd non blocking patch with one that actually works. This fixes using mikmod
