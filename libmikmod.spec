@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 3.beta2%{?dist}
+Release: 4.beta2%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -80,6 +80,9 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2.0-4.beta2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
 * Mon Feb 18 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 3.2.0-3.beta2
 - Fix MikMod_InfoLoader() and MikMod_InfoDriver() functions, fixing mikmod -n
   output
