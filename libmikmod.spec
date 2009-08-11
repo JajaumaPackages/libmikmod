@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 5.beta2%{?dist}
+Release: 6.beta2%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -24,6 +24,8 @@ XM, ULT and IT.
 Group: Development/Libraries
 Summary: Header files and documentation for compiling mikmod applications
 Requires: %{name} = %{version}-%{release}
+Requires(post): /sbin/install-info
+Requires(postun): /sbin/install-info
 Provides: mikmod-devel = 3.2.2-4
 Obsoletes: mikmod-devel < 3.2.2-4
 
@@ -56,13 +58,13 @@ rm -rf $RPM_BUILD_ROOT
 %post -p /sbin/ldconfig
 
 %post devel
-[ -x /sbin/install-info ] && /sbin/install-info %{_infodir}/mikmod.info %{_infodir}/dir || :
+[ -x /sbin/install-info ] && /sbin/install-info %{_infodir}/mikmod.info %{_infodir}/dir > /dev/null 2>&1 || :
 
 %postun -p /sbin/ldconfig
 
 %postun devel
 if [ $1 = 0 ] ; then
-	[ -x /sbin/install-info ] && /sbin/install-info  --delete %{_infodir}/mikmod.info %{_infodir}/dir || :
+	[ -x /sbin/install-info ] && /sbin/install-info  --delete %{_infodir}/mikmod.info %{_infodir}/dir > /dev/null 2>&1 || :
 fi
 
 %files
@@ -80,6 +82,10 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Tue Aug 11 2009 Jindrich Novy <jnovy@redhat.com> 3.2.0-6.beta2
+- don't complain if installing with --excludedocs (#515953)
+- add missing requires
+
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2.0-5.beta2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
