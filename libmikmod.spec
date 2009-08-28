@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 7.beta2%{?dist}
+Release: 8.beta2%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -15,6 +15,7 @@ Patch3:  libmikmod-multilib.patch
 Patch4:  libmikmod-autoconf.patch
 Patch5:  libmikmod-info.patch
 Patch6:  libmikmod-CVE-2007-6720.patch
+Patch7:  libmikmod-CVE-2009-0179.patch
 
 %description
 libmikmod is a library used by the mikmod MOD music file player for
@@ -43,6 +44,7 @@ applications for mikmod.
 %patch4 -p1 -b .autoconf
 %patch5 -p1 -b .info
 %patch6 -p1 -b .CVE-2007-6720
+%patch7 -p1 -b .CVE-2009-0179
 
 %build
 %configure
@@ -84,6 +86,9 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Fri Aug 28 2009 Jindrich Novy <jnovy@redhat.com> 3.2.0-8.beta2
+- fix CVE-2009-0179 (#519992)
+
 * Fri Aug 28 2009 Jindrich Novy <jnovy@redhat.com> 3.2.0-7.beta2
 - fix CVE-2007-6720 (#519990)
 
