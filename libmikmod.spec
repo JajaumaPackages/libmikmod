@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 8.beta2%{?dist}
+Release: 9.beta2%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -86,6 +86,11 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Mon Nov 23 2009 Hans de Goede <hdegoede@redhat.com> 3.2.0-9.beta2
+- Fix CVE-2007-6720 fix, it causes mods to sound wrong, and even causes
+  crashes under certain circumstances (#540234), see:
+  http://bugzilla.libsdl.org/show_bug.cgi?id=506
+
 * Fri Aug 28 2009 Jindrich Novy <jnovy@redhat.com> 3.2.0-8.beta2
 - fix CVE-2009-0179 (#519992)
 
