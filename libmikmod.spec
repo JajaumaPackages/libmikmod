@@ -1,22 +1,19 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 13.beta2%{?dist}
+Release: 13.beta3%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: esound-devel
-URL: http://mikmod.raphnet.net/
-Source0: http://mikmod.raphnet.net/files/libmikmod-%{version}-beta2.tar.bz2
+URL: http://http://mikmod.shlomifish.org/
+Source0: http://mikmod.shlomifish.org/files/libmikmod-%{version}b3.tar.gz
 Patch0:  libmikmod-64bit.patch
 Patch1:  libmikmod-esd.patch
 Patch2:  libmikmod-strip-lib.patch
 Patch3:  libmikmod-multilib.patch
-Patch4:  libmikmod-autoconf.patch
-Patch5:  libmikmod-info.patch
 Patch6:  libmikmod-CVE-2007-6720.patch
 Patch7:  libmikmod-CVE-2009-0179.patch
-Patch8:  libmikmod-CVE-2009-3995,3996.patch
 
 %description
 libmikmod is a library used by the mikmod MOD music file player for
@@ -37,19 +34,16 @@ This package includes the header files you will need to compile
 applications for mikmod.
 
 %prep
-%setup -q -n %{name}-%{version}-beta2
+%setup -q -n %{name}-%{version}b3
 %patch0 -p1 -b .64bit
 %patch1 -p1 -b .esd
 %patch2 -p1 -b .strip-lib
 %patch3 -p1 -b .multilib
-%patch4 -p1 -b .autoconf
-%patch5 -p1 -b .info
 %patch6 -p1 -b .CVE-2007-6720
 %patch7 -p1 -b .CVE-2009-0179
-%patch8 -p1 -b .CVE-2009-3995,3996
 
 %build
-%configure
+%configure --enable-dl
 make %{?_smp_flags}
 
 %install
@@ -88,6 +82,10 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Tue Apr 10 2012 Jindrich Novy <jnovy@redhat.com> - 3.2.0-13.beta3
+- update to 3.2.0-beta3
+- drop upstreamed patches, forwardport the rest
+
 * Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2.0-13.beta2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 

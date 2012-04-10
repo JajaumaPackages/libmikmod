@@ -1,6 +1,7 @@
---- libmikmod-3.2.0-beta2/drivers/drv_esd.c	2004-01-31 23:39:40.000000000 +0100
-+++ libmikmod-3.2.0-beta2.new/drivers/drv_esd.c	2008-02-18 12:09:07.000000000 +0100
-@@ -81,7 +81,6 @@
+diff -up libmikmod-3.2.0b3/drivers/drv_esd.c.esd libmikmod-3.2.0b3/drivers/drv_esd.c
+--- libmikmod-3.2.0b3/drivers/drv_esd.c.esd	2012-03-14 18:02:59.000000000 +0100
++++ libmikmod-3.2.0b3/drivers/drv_esd.c	2012-04-10 06:15:29.052535082 +0200
+@@ -81,7 +81,6 @@ static void* libesd=NULL;
  
  static	int sndfd=-1;
  static	esd_format_t format;
@@ -8,7 +9,7 @@
  static	CHAR *espeaker=NULL;
  
  #ifdef MIKMOD_DYNAMIC
-@@ -100,7 +99,7 @@
+@@ -100,7 +99,7 @@ static BOOL ESD_Link(void)
  	if (libesd) return 0;
  
  	/* load libesd.so */
@@ -17,7 +18,7 @@
  	if (!libesd) return 1;
  
  	/* resolve function references */
-@@ -124,23 +123,88 @@
+@@ -124,23 +123,88 @@ static void ESD_Unlink(void)
  }
  #endif
  
@@ -118,7 +119,7 @@
  }
  
  static void ESD_CommandLine(CHAR *cmdline)
-@@ -193,13 +257,14 @@
+@@ -193,13 +257,14 @@ static BOOL ESD_Init_internal(void)
  			_mm_errno=MMERR_OPENING_AUDIO;
  			return 1;
  		}
@@ -127,24 +128,15 @@
  		_mm_errno=MMERR_OUT_OF_MEMORY;
  		return 1;
  	}
--
--	if (!(audiobuffer=(SBYTE*)_mm_malloc(ESD_BUF_SIZE*sizeof(char))))
+ 
+-	if (!(audiobuffer=(SBYTE*)MikMod_malloc(ESD_BUF_SIZE*sizeof(char))))
 -		return 1;
-+	
 +	/* Initialize the audiobuffer */
 +	audiobuffer_init();
  
  	return VC_Init();
  }
-@@ -218,7 +283,6 @@
- static void ESD_Exit_internal(void)
- {
- 	VC_Exit();
--	_mm_free(audiobuffer);
- 	if (sndfd>=0) {
- 		esd_closestream(sndfd);
- 		sndfd=-1;
-@@ -234,19 +298,50 @@
+@@ -234,19 +299,50 @@ static void ESD_Exit(void)
  #endif
  }
  
@@ -203,7 +195,7 @@
  	} else {
  		/* an alarm would be better, but then the library user could not use
  		   alarm(2) himself... */
-@@ -255,8 +350,11 @@
+@@ -255,8 +351,11 @@ static void ESD_Update_internal(int coun
  			/* Attempt to reconnect every 5 seconds */
  			if (!(SETENV))
  				if ((sndfd=esd_playstream(format,md_mixfreq,espeaker,"libmikmod"))>=0) {
@@ -217,7 +209,7 @@
  				}
  		}
  	}
-@@ -264,22 +362,24 @@
+@@ -264,22 +363,24 @@ static void ESD_Update_internal(int coun
  
  static void ESD_Update(void)
  {
@@ -245,7 +237,7 @@
  	/* since the default behaviour of SIGPIPE on most Unices is to kill the
  	   program, we'll prefer handle EPIPE ourselves should the esd die - recent
  	   esdlib use a do-nothing handler, which prevents us from receiving EPIPE,
-@@ -289,6 +389,7 @@
+@@ -289,6 +390,7 @@ static BOOL ESD_PlayStart(void)
  	/* silence buffers */
  	VC_SilenceBytes(audiobuffer,ESD_BUF_SIZE);
  	esd_writebuf(sndfd,audiobuffer,ESD_BUF_SIZE);
@@ -253,7 +245,7 @@
  
  	return VC_PlayStart();
  }
-@@ -299,6 +400,7 @@
+@@ -299,6 +401,7 @@ static void ESD_PlayStop(void)
  		/* silence buffers */
  		VC_SilenceBytes(audiobuffer,ESD_BUF_SIZE);
  		esd_writebuf(sndfd,audiobuffer,ESD_BUF_SIZE);

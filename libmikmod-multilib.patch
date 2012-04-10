@@ -31,14 +31,3 @@
  	*)
  		echo "${usage}" 1>&2
  		exit 1
---- libmikmod-3.1.11/configure.old	2004-01-21 18:43:52.000000000 +0100
-+++ libmikmod-3.1.11/configure	2006-05-31 17:37:10.000000000 +0200
-@@ -6390,7 +6390,7 @@
- cross_compiling=$ac_cv_prog_cc_cross
- 
-     ESD_CFLAGS=`$ESD_CONFIG $esdconf_args --cflags`
--    ESD_LIBS=`$ESD_CONFIG $esdconf_args --libs`
-+    ESD_LIBS=`$ESD_CONFIG $esdconf_args --libs | sed -r 's|-L[^ ]+||g'`
- 
-     esd_major_version=`$ESD_CONFIG $esd_args --version | \
-            sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
