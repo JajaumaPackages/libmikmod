@@ -1,13 +1,13 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 13.beta3%{?dist}
+Release: 14.beta4%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: esound-devel
 URL: http://http://mikmod.shlomifish.org/
-Source0: http://mikmod.shlomifish.org/files/libmikmod-%{version}b3.tar.gz
+Source0: http://mikmod.shlomifish.org/files/libmikmod-%{version}b4.tar.gz
 Patch0:  libmikmod-64bit.patch
 Patch1:  libmikmod-esd.patch
 Patch2:  libmikmod-strip-lib.patch
@@ -34,7 +34,7 @@ This package includes the header files you will need to compile
 applications for mikmod.
 
 %prep
-%setup -q -n %{name}-%{version}b3
+%setup -q -n %{name}-%{version}b4
 %patch0 -p1 -b .64bit
 %patch1 -p1 -b .esd
 %patch2 -p1 -b .strip-lib
@@ -82,6 +82,9 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Sun May 13 2012 Jindrich Novy <jnovy@redhat.com> - 3.2.0-13.beta4
+- update to 3.2.0-beta4
+
 * Tue Apr 10 2012 Jindrich Novy <jnovy@redhat.com> - 3.2.0-13.beta3
 - update to 3.2.0-beta3
 - drop upstreamed patches, forwardport the rest
