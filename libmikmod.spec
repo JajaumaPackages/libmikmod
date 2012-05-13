@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 14.beta4%{?dist}
+Release: 14.beta4.1%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -43,7 +43,7 @@ applications for mikmod.
 %patch7 -p1 -b .CVE-2009-0179
 
 %build
-%configure --enable-dl
+%configure --enable-dl --disable-altivec
 make %{?_smp_flags}
 
 %install
@@ -82,6 +82,9 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Sun May 13 2012 Karsten Hopp <karsten@redhat.com> 3.2.0-14.beta4.1
+- disable altivec (used on PPC only) 
+
 * Sun May 13 2012 Jindrich Novy <jnovy@redhat.com> - 3.2.0-13.beta4
 - update to 3.2.0-beta4
 
