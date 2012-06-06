@@ -82,7 +82,7 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
-* Wed May 06 2012 Jindrich Novy <jnovy@redhat.com> 3.2.0-1
+* Wed Jun 06 2012 Jindrich Novy <jnovy@redhat.com> 3.2.0-1
 - update to stable libmikmod-3.2.0
 
 * Sun May 13 2012 Karsten Hopp <karsten@redhat.com> 3.2.0-14.beta4.1
