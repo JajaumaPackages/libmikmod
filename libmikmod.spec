@@ -1,12 +1,11 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 1%{?dist}
+Release: 15%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
-Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires: esound-devel
 URL: http://http://mikmod.shlomifish.org/
+
 Source0: http://mikmod.shlomifish.org/files/libmikmod-%{version}.tar.gz
 Patch0:  libmikmod-64bit.patch
 Patch1:  libmikmod-esd.patch
@@ -14,6 +13,8 @@ Patch2:  libmikmod-strip-lib.patch
 Patch3:  libmikmod-multilib.patch
 Patch6:  libmikmod-CVE-2007-6720.patch
 Patch7:  libmikmod-CVE-2009-0179.patch
+
+BuildRequires: alsa-lib-devel
 
 %description
 libmikmod is a library used by the mikmod MOD music file player for
@@ -43,17 +44,13 @@ applications for mikmod.
 %patch7 -p1 -b .CVE-2009-0179
 
 %build
-%configure --enable-dl --disable-altivec
+%configure --enable-dl --disable-altivec --enable-alsa
 make %{?_smp_flags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir $RPM_BUILD_ROOT%{_libdir}/*.a
 find $RPM_BUILD_ROOT | grep "\\.la$" | xargs rm -f
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %post -p /sbin/ldconfig
 
@@ -82,6 +79,11 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Wed Jul  4 2012 Peter Robinson <pbrobinson@fedoraproject.org> - 3.2.0-15
+- Bump NVR to 15 so it's higher than the betas
+- Drop ancient esound, enable alsa
+- Modernise spec
+
 * Wed Jun 06 2012 Jindrich Novy <jnovy@redhat.com> 3.2.0-1
 - update to stable libmikmod-3.2.0
 
