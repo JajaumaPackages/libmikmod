@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 15%{?dist}
+Release: 16%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 URL: http://http://mikmod.shlomifish.org/
@@ -79,6 +79,9 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2.0-16
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Wed Jul  4 2012 Peter Robinson <pbrobinson@fedoraproject.org> - 3.2.0-15
 - Bump NVR to 15 so it's higher than the betas
 - Drop ancient esound, enable alsa
