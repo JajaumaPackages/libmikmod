@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 16%{?dist}
+Release: 17%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 URL: http://http://mikmod.shlomifish.org/
@@ -13,6 +13,8 @@ Patch2:  libmikmod-strip-lib.patch
 Patch3:  libmikmod-multilib.patch
 Patch6:  libmikmod-CVE-2007-6720.patch
 Patch7:  libmikmod-CVE-2009-0179.patch
+# Fix rhbz#845782
+Patch8:  libmikmod-Player_Start-crash.patch
 
 BuildRequires: alsa-lib-devel
 
@@ -42,6 +44,7 @@ applications for mikmod.
 %patch3 -p1 -b .multilib
 %patch6 -p1 -b .CVE-2007-6720
 %patch7 -p1 -b .CVE-2009-0179
+%patch8 -p1
 
 %build
 %configure --enable-dl --disable-altivec --enable-alsa
@@ -65,12 +68,10 @@ if [ $1 = 0 ] ; then
 fi
 
 %files
-%defattr(-, root, root)
 %doc AUTHORS COPYING.LIB COPYING.LESSER NEWS README TODO
 %{_libdir}/*.so.*
 
 %files devel
-%defattr(-, root, root)
 %{_bindir}/*-config
 %{_libdir}/*.so
 %{_datadir}/aclocal/*
@@ -79,6 +80,9 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Sun Aug  5 2012 Hans de Goede <hdegoede@redhat.com> - 3.2.0-17
+- Fix a crash in Player_Start() (rhbz#845782)
+
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2.0-16
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 

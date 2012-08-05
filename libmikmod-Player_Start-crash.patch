@@ -1,0 +1,17 @@
+diff -up libmikmod-3.2.0/playercode/mplayer.c~ libmikmod-3.2.0/playercode/mplayer.c
+--- libmikmod-3.2.0/playercode/mplayer.c~	2012-08-05 11:30:08.000000000 +0200
++++ libmikmod-3.2.0/playercode/mplayer.c	2012-08-05 11:34:56.233896590 +0200
+@@ -3050,8 +3050,11 @@ MIKMODAPI void Player_Start(MODULE *mod)
+ 	MUTEX_LOCK(vars);
+ 	if (pf!=mod) {
+ 		/* new song is being started, so completely stop out the old one. */
+-		if (pf) pf->forbid=1;
+-		for (t=0;t<NUMVOICES(pf);t++) Voice_Stop_internal(t);
++		if (pf) {
++			pf->forbid=1;
++			for (t=0;t<NUMVOICES(pf);t++)
++				Voice_Stop_internal(t);
++		}
+ 	}
+ 	pf=mod;
+ 	MUTEX_UNLOCK(vars);
