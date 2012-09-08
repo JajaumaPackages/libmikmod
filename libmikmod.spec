@@ -1,7 +1,7 @@
 Summary: A MOD music file player library
 Name: libmikmod
 Version: 3.2.0
-Release: 17%{?dist}
+Release: 18%{?dist}
 License: GPLv2 and LGPLv2+
 Group: Applications/Multimedia
 URL: http://http://mikmod.shlomifish.org/
@@ -15,6 +15,8 @@ Patch6:  libmikmod-CVE-2007-6720.patch
 Patch7:  libmikmod-CVE-2009-0179.patch
 # Fix rhbz#845782
 Patch8:  libmikmod-Player_Start-crash.patch
+# Fix rhbz#855130
+Patch9:  libmikmod-malloc-fail.patch
 
 BuildRequires: alsa-lib-devel
 
@@ -45,6 +47,7 @@ applications for mikmod.
 %patch6 -p1 -b .CVE-2007-6720
 %patch7 -p1 -b .CVE-2009-0179
 %patch8 -p1
+%patch9 -p1
 
 %build
 %configure --enable-dl --disable-altivec --enable-alsa
@@ -80,6 +83,9 @@ fi
 %{_mandir}/man1/libmikmod-config*
 
 %changelog
+* Sat Sep  8 2012 Hans de Goede <hdegoede@redhat.com> - 3.2.0-18
+- Fix a crash in align_pointer() (rhbz#855130)
+
 * Sun Aug  5 2012 Hans de Goede <hdegoede@redhat.com> - 3.2.0-17
 - Fix a crash in Player_Start() (rhbz#845782)
 
