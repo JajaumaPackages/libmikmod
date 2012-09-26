@@ -1,74 +1,73 @@
-Summary: A MOD music file player library
-Name: libmikmod
-Version: 3.2.0
-Release: 18%{?dist}
-License: GPLv2 and LGPLv2+
-Group: Applications/Multimedia
-URL: http://http://mikmod.shlomifish.org/
-
-Source0: http://mikmod.shlomifish.org/files/libmikmod-%{version}.tar.gz
-Patch0:  libmikmod-64bit.patch
-Patch1:  libmikmod-esd.patch
-Patch2:  libmikmod-strip-lib.patch
-Patch3:  libmikmod-multilib.patch
-Patch6:  libmikmod-CVE-2007-6720.patch
-Patch7:  libmikmod-CVE-2009-0179.patch
-# Fix rhbz#845782
-Patch8:  libmikmod-Player_Start-crash.patch
+Summary:        A MOD music file player library
+Name:           libmikmod
+Version:        3.2.0
+Release:        19%{?dist}
+License:        GPLv2 and LGPLv2+
+Group:          Applications/Multimedia
+URL:            http://mikmod.shlomifish.org/
+Source0:        http://mikmod.shlomifish.org/files/libmikmod-%{version}.tar.gz
+Patch0:         libmikmod-64bit.patch
+Patch1:         libmikmod-strip-lib.patch
+Patch2:         libmikmod-multilib.patch
+Patch3:         libmikmod-CVE-2007-6720.patch
+Patch4:         libmikmod-CVE-2009-0179.patch
 # Fix rhbz#855130
-Patch9:  libmikmod-malloc-fail.patch
-
-BuildRequires: alsa-lib-devel
+Patch5:         libmikmod-malloc-fail.patch
+BuildRequires:  alsa-lib-devel
 
 %description
 libmikmod is a library used by the mikmod MOD music file player for
 UNIX-like systems. Supported file formats include MOD, STM, S3M, MTM,
 XM, ULT and IT.
 
+
 %package devel
-Group: Development/Libraries
-Summary: Header files and documentation for compiling mikmod applications
-Requires: %{name} = %{version}-%{release}
-Requires(post): /sbin/install-info
-Requires(postun): /sbin/install-info
-Provides: mikmod-devel = 3.2.2-4
-Obsoletes: mikmod-devel < 3.2.2-4
+Group:          Development/Libraries
+Summary:        Header files and documentation for compiling mikmod applications
+Provides:       mikmod-devel = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires(post): info
+Requires(preun): info
 
 %description devel
 This package includes the header files you will need to compile
 applications for mikmod.
 
+
 %prep
 %setup -q
-%patch0 -p1 -b .64bit
-%patch1 -p1 -b .esd
-%patch2 -p1 -b .strip-lib
-%patch3 -p1 -b .multilib
-%patch6 -p1 -b .CVE-2007-6720
-%patch7 -p1 -b .CVE-2009-0179
-%patch8 -p1
-%patch9 -p1
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+
 
 %build
 %configure --enable-dl --disable-altivec --enable-alsa
 make %{?_smp_flags}
+
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir $RPM_BUILD_ROOT%{_libdir}/*.a
 find $RPM_BUILD_ROOT | grep "\\.la$" | xargs rm -f
 
-%post -p /sbin/ldconfig
 
-%post devel
-[ -x /sbin/install-info ] && /sbin/install-info %{_infodir}/mikmod.info %{_infodir}/dir > /dev/null 2>&1 || :
+%post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
+
+%post devel
+/sbin/install-info %{_infodir}/mikmod.info %{_infodir}/dir || :
+
 %postun devel
 if [ $1 = 0 ] ; then
-	[ -x /sbin/install-info ] && /sbin/install-info  --delete %{_infodir}/mikmod.info %{_infodir}/dir > /dev/null 2>&1 || :
+  /sbin/install-info --delete %{_infodir}/mikmod.info %{_infodir}/dir || :
 fi
+
 
 %files
 %doc AUTHORS COPYING.LIB COPYING.LESSER NEWS README TODO
@@ -82,7 +81,12 @@ fi
 %{_infodir}/mikmod*
 %{_mandir}/man1/libmikmod-config*
 
+
 %changelog
+* Wed Sep 26 2012 Hans de Goede <hdegoede@redhat.com> - 3.2.0-19
+- Fix an array overflow caused by libmikmod-CVE-2007-6720.patch (rhbz#859050)
+- Cleanup the specfile a bit
+
 * Sat Sep  8 2012 Hans de Goede <hdegoede@redhat.com> - 3.2.0-18
 - Fix a crash in align_pointer() (rhbz#855130)
 
