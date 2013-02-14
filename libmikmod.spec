@@ -1,7 +1,7 @@
 Summary:        A MOD music file player library
 Name:           libmikmod
 Version:        3.2.0
-Release:        19%{?dist}
+Release:        20%{?dist}
 License:        GPLv2 and LGPLv2+
 Group:          Applications/Multimedia
 URL:            http://mikmod.shlomifish.org/
@@ -83,6 +83,9 @@ fi
 
 
 %changelog
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2.0-20
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
 * Wed Sep 26 2012 Hans de Goede <hdegoede@redhat.com> - 3.2.0-19
 - Fix an array overflow caused by libmikmod-CVE-2007-6720.patch (rhbz#859050)
 - Cleanup the specfile a bit
