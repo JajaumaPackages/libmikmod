@@ -1,7 +1,7 @@
 Summary:        A MOD music file player library
 Name:           libmikmod
 Version:        3.2.0
-Release:        20%{?dist}
+Release:        21%{?dist}
 License:        GPLv2 and LGPLv2+
 Group:          Applications/Multimedia
 URL:            http://mikmod.shlomifish.org/
@@ -13,7 +13,9 @@ Patch3:         libmikmod-CVE-2007-6720.patch
 Patch4:         libmikmod-CVE-2009-0179.patch
 # Fix rhbz#855130
 Patch5:         libmikmod-malloc-fail.patch
-BuildRequires:  alsa-lib-devel
+Patch6:         libmikmod-alsadrv.patch
+Patch7:         libmikmod-cflags.patch
+BuildRequires:  alsa-lib-devel libtool
 
 %description
 libmikmod is a library used by the mikmod MOD music file player for
@@ -42,6 +44,9 @@ applications for mikmod.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
+%patch7 -p1
+autoreconf -i -f
 
 
 %build
@@ -83,6 +88,11 @@ fi
 
 
 %changelog
+* Sat Apr  6 2013 Hans de Goede <hdegoede@redhat.com> - 3.2.0-21
+- Fix stuttering sound and hang on exit for apps using libmikmod's alsa driver
+- Remove non standard options configure adds to CFLAGS
+- Run autoreconf for aarch64 support (rhbz#925794)
+
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2.0-20
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
