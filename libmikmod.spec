@@ -1,7 +1,7 @@
 Summary:        A MOD music file player library
 Name:           libmikmod
 Version:        3.2.0
-Release:        21%{?dist}
+Release:        22%{?dist}
 License:        GPLv2 and LGPLv2+
 Group:          Applications/Multimedia
 URL:            http://mikmod.shlomifish.org/
@@ -88,6 +88,9 @@ fi
 
 
 %changelog
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2.0-22
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Sat Apr  6 2013 Hans de Goede <hdegoede@redhat.com> - 3.2.0-21
 - Fix stuttering sound and hang on exit for apps using libmikmod's alsa driver
 - Remove non standard options configure adds to CFLAGS
