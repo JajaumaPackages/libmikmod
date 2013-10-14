@@ -1,7 +1,7 @@
 Summary:        A MOD music file player library
 Name:           libmikmod
 Version:        3.3.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPLv2 and LGPLv2+
 Group:          Applications/Multimedia
 URL:            http://mikmod.sourceforge.net/
@@ -38,11 +38,7 @@ applications for mikmod.
 
 
 %build
-%ifarch x86_64
-%configure --enable-dl --enable-alsa --enable-simd
-%else
 %configure --enable-dl --enable-alsa --disable-simd
-%endif
 make %{?_smp_flags}
 
 
@@ -81,6 +77,9 @@ fi
 
 
 %changelog
+* Mon Oct 14 2013 Hans de Goede <hdegoede@redhat.com> - 3.3.2-2
+- Disable SSE2 use even on x86_64, as upstream advises against using it
+
 * Mon Oct 14 2013 Hans de Goede <hdegoede@redhat.com> - 3.3.2-1
 - New upstream and new upstream release 3.3.2
 - Drop a bunch of merged patches
