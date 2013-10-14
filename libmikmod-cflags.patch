@@ -1,40 +1,55 @@
-diff -up libmikmod-3.2.0/config.h.in~ libmikmod-3.2.0/config.h.in
-diff -up libmikmod-3.2.0/configure.in~ libmikmod-3.2.0/configure.in
---- libmikmod-3.2.0/configure.in~	2012-06-01 15:15:29.000000000 +0200
-+++ libmikmod-3.2.0/configure.in	2013-04-06 12:43:30.200076725 +0200
-@@ -634,66 +634,6 @@ then
+diff -up libmikmod-3.3.2/configure~ libmikmod-3.3.2/configure
+--- libmikmod-3.3.2/configure~	2013-10-05 16:00:10.000000000 +0200
++++ libmikmod-3.3.2/configure	2013-10-14 11:57:50.484129254 +0200
+@@ -14566,83 +14566,6 @@ $as_echo "#define HAVE_RTLD_GLOBAL 1" >>
  	fi
  fi
  
 -# If compiling with gcc, use adequate optimization flags
--if test $ac_cv_prog_gcc = yes
+-if test $ac_cv_c_compiler_gnu = yes
 -then
 -	# On at least x86 platforms, gcc 2.7.2.1 and earlier won't work if -O3 (or
 -	# -finline-functions) are used. Versions 2.7.2.3, 2.8.x and egcs are ok
 -	# (didn't test 2.7.2.2).
 -	# Until there's an easy way to catch broken inlining, we choose flags known
 -	# to work correctly depending of the compiler version.
--	AC_CACHE_CHECK([if inlining functions is safe],
--	libmikmod_cv_gcc_inline_safe,
--	AC_TRY_RUN([
--int main()
+-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if inlining functions is safe" >&5
+-$as_echo_n "checking if inlining functions is safe... " >&6; }
+-if test "${libmikmod_cv_gcc_inline_safe+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
 -{
--#if defined __GNUC__ && (__GNUC__ > 2 || __GNUC__ == 2 && __GNUC_MINOR__ > 7)
--	exit(0);
--#else
--	exit(1);
+-
+-#if !(defined __GNUC__ && (__GNUC__ > 2 || __GNUC__ == 2 && __GNUC_MINOR__ > 7))
+-#error inlining functions is not safe
 -#endif
--}],
--	libmikmod_cv_gcc_inline_safe=yes,
--	libmikmod_cv_gcc_inline_safe=no,
--	libmikmod_cv_gcc_inline_safe=no))
--	if test $libmikmod_cv_gcc_inline_safe = yes
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  libmikmod_cv_gcc_inline_safe=yes
+-else
+-  libmikmod_cv_gcc_inline_safe=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $libmikmod_cv_gcc_inline_safe" >&5
+-$as_echo "$libmikmod_cv_gcc_inline_safe" >&6; }
+-	if test $libmikmod_cv_gcc_inline_safe = no
 -	then
--		CFLAGS="$CFLAGS -finline-functions"
--	else
 -		CFLAGS="$CFLAGS -fno-strength-reduce"
 -	fi
--	CFLAGS="$CFLAGS -funroll-loops -ffast-math"
+-	CFLAGS="$CFLAGS -ffast-math"
+-	if test $libmikmod_darwin = yes; then
+-		CFLAGS="$CFLAGS -fno-common"
+-	fi
 -	if test $libmikmod_debug = yes
 -	then
 -		CFLAGS="$CFLAGS -Wall -Werror"
@@ -46,15 +61,16 @@ diff -up libmikmod-3.2.0/configure.in~ libmikmod-3.2.0/configure.in
 -	# gcc works fine. Issue a warning if the compiler is pgcc, until a reliable
 -	# way to detect flawed version (or, better, a reliable workaround) is
 -	# found.
--dnl do not cache this test - better rechecking every time
--	AC_MSG_CHECKING(if compiler is pgcc)
+-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiler is pgcc" >&5
+-$as_echo_n "checking if compiler is pgcc... " >&6; }
 -	if ($CC -v 2>&1 | grep ^pgcc > /dev/null) 2>/dev/null
 -	then
 -		libmikmod_gcc_is_pgcc=yes
 -	else
 -		libmikmod_gcc_is_pgcc=no
 -	fi
--	AC_MSG_RESULT($libmikmod_gcc_is_pgcc)
+-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $libmikmod_gcc_is_pgcc" >&5
+-$as_echo "$libmikmod_gcc_is_pgcc" >&6; }
 -	if test $libmikmod_gcc_is_pgcc = yes
 -	then
 -		echo "
@@ -68,4 +84,4 @@ diff -up libmikmod-3.2.0/configure.in~ libmikmod-3.2.0/configure.in
 -
  if test x$libmikmod_threads != xno
  then
- 	AC_DEFINE(HAVE_PTHREAD)
+ 

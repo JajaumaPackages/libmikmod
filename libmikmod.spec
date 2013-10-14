@@ -1,21 +1,15 @@
 Summary:        A MOD music file player library
 Name:           libmikmod
-Version:        3.2.0
-Release:        22%{?dist}
+Version:        3.3.2
+Release:        1%{?dist}
 License:        GPLv2 and LGPLv2+
 Group:          Applications/Multimedia
-URL:            http://mikmod.shlomifish.org/
-Source0:        http://mikmod.shlomifish.org/files/libmikmod-%{version}.tar.gz
+URL:            http://mikmod.sourceforge.net/
+Source0:        http://downloads.sourceforge.net/mikmod/libmikmod-%{version}.tar.gz
 Patch0:         libmikmod-64bit.patch
-Patch1:         libmikmod-strip-lib.patch
-Patch2:         libmikmod-multilib.patch
-Patch3:         libmikmod-CVE-2007-6720.patch
-Patch4:         libmikmod-CVE-2009-0179.patch
-# Fix rhbz#855130
-Patch5:         libmikmod-malloc-fail.patch
-Patch6:         libmikmod-alsadrv.patch
-Patch7:         libmikmod-cflags.patch
-BuildRequires:  alsa-lib-devel libtool
+Patch1:         libmikmod-multilib.patch
+Patch2:         libmikmod-cflags.patch
+BuildRequires:  alsa-lib-devel
 
 %description
 libmikmod is a library used by the mikmod MOD music file player for
@@ -41,16 +35,14 @@ applications for mikmod.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-autoreconf -i -f
 
 
 %build
-%configure --enable-dl --disable-altivec --enable-alsa
+%ifarch x86_64
+%configure --enable-dl --enable-alsa --enable-simd
+%else
+%configure --enable-dl --enable-alsa --disable-simd
+%endif
 make %{?_smp_flags}
 
 
@@ -81,6 +73,7 @@ fi
 %files devel
 %{_bindir}/*-config
 %{_libdir}/*.so
+%{_libdir}/pkgconfig/%{name}.pc
 %{_datadir}/aclocal/*
 %{_includedir}/*
 %{_infodir}/mikmod*
@@ -88,6 +81,10 @@ fi
 
 
 %changelog
+* Mon Oct 14 2013 Hans de Goede <hdegoede@redhat.com> - 3.3.2-1
+- New upstream and new upstream release 3.3.2
+- Drop a bunch of merged patches
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2.0-22
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
@@ -196,5 +193,5 @@ fi
 - don't ship static library
 - update upstream patch, drop texinfo dependency (thanks to Stepan Kasal)
 
-* Wed Oct 18 2007 Jindrich Novy <jnovy@redhat.com> 3.1.11-1
+* Thu Oct 18 2007 Jindrich Novy <jnovy@redhat.com> 3.1.11-1
 - package libmikmod
