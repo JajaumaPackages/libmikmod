@@ -1,6 +1,6 @@
 Summary:        A MOD music file player library
 Name:           libmikmod
-Version:        3.3.3
+Version:        3.3.4
 Release:        1%{?dist}
 License:        GPLv2 and LGPLv2+
 Group:          Applications/Multimedia
@@ -77,6 +77,9 @@ fi
 
 
 %changelog
+* Wed Dec 25 2013 Hans de Goede <hdegoede@redhat.com> - 3.3.4-1
+- New upstream release 3.3.4
+
 * Sun Oct 20 2013 Hans de Goede <hdegoede@redhat.com> - 3.3.3-1
 - New upstream release 3.3.3
 - Drop a bunch of merged patches
