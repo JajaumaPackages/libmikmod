@@ -1,6 +1,6 @@
 Summary:        A MOD music file player library
 Name:           libmikmod
-Version:        3.3.5
+Version:        3.3.6
 Release:        1%{?dist}
 License:        GPLv2 and LGPLv2+
 Group:          Applications/Multimedia
@@ -9,7 +9,7 @@ Source0:        http://downloads.sourceforge.net/mikmod/libmikmod-%{version}.tar
 Patch0:         libmikmod-64bit.patch
 Patch1:         libmikmod-multilib.patch
 Patch2:         libmikmod-cflags.patch
-BuildRequires:  alsa-lib-devel
+BuildRequires:  alsa-lib-devel pulseaudio-libs-devel
 
 %description
 libmikmod is a library used by the mikmod MOD music file player for
@@ -77,6 +77,11 @@ fi
 
 
 %changelog
+* Sat Mar 22 2014 Hans de Goede <hdegoede@redhat.com> - 3.3.6-1
+- New upstream release 3.3.6
+- Fixes alsa output not working when alsa-devel is not installes (rhbz#1076966)
+- Add BR pulseaudio-libs-devel to enable building of pa output (rhbz#1079527)
+
 * Sat Mar  8 2014 Hans de Goede <hdegoede@redhat.com> - 3.3.5-1
 - New upstream release 3.3.5
 

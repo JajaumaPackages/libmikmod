@@ -1,7 +1,7 @@
-diff -up libmikmod-3.3.4/configure~ libmikmod-3.3.4/configure
---- libmikmod-3.3.4/configure~	2013-12-08 11:00:10.000000000 +0100
-+++ libmikmod-3.3.4/configure	2013-12-25 10:39:04.028011559 +0100
-@@ -15584,83 +15584,6 @@ $as_echo "#define HAVE_RTLD_GLOBAL 1" >>
+diff -up libmikmod-3.3.6/configure~ libmikmod-3.3.6/configure
+--- libmikmod-3.3.6/configure~	2014-03-20 21:20:14.000000000 +0100
++++ libmikmod-3.3.6/configure	2014-03-22 12:31:05.508979340 +0100
+@@ -15836,79 +15836,6 @@ $as_echo "#define HAVE_RTLD_GLOBAL 1" >>
  	fi
  fi
  
@@ -42,16 +42,14 @@ diff -up libmikmod-3.3.4/configure~ libmikmod-3.3.4/configure
 -fi
 -{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $libmikmod_cv_gcc_inline_safe" >&5
 -$as_echo "$libmikmod_cv_gcc_inline_safe" >&6; }
--	if test $libmikmod_cv_gcc_inline_safe = no
--	then
+-	if test $libmikmod_cv_gcc_inline_safe = no; then
 -		CFLAGS="$CFLAGS -fno-strength-reduce"
 -	fi
 -	CFLAGS="$CFLAGS -ffast-math"
 -	if test $libmikmod_darwin = yes; then
 -		CFLAGS="$CFLAGS -fno-common"
 -	fi
--	if test $libmikmod_debug = yes
--	then
+-	if test $libmikmod_debug = yes; then
 -		CFLAGS="$CFLAGS -Wall -Werror"
 -	else
 -		CFLAGS="$CFLAGS -Wall"
@@ -63,16 +61,14 @@ diff -up libmikmod-3.3.4/configure~ libmikmod-3.3.4/configure
 -	# found.
 -	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiler is pgcc" >&5
 -$as_echo_n "checking if compiler is pgcc... " >&6; }
--	if ($CC -v 2>&1 | grep ^pgcc > /dev/null) 2>/dev/null
--	then
+-	if ($CC -v 2>&1 | grep ^pgcc > /dev/null) 2>/dev/null ; then
 -		libmikmod_gcc_is_pgcc=yes
 -	else
 -		libmikmod_gcc_is_pgcc=no
 -	fi
 -	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $libmikmod_gcc_is_pgcc" >&5
 -$as_echo "$libmikmod_gcc_is_pgcc" >&6; }
--	if test $libmikmod_gcc_is_pgcc = yes
--	then
+-	if test $libmikmod_gcc_is_pgcc = yes; then
 -		echo "
 -*** Version 2.95.2 of this compiler, and perhaps others, are unable to
 -*** compile libmikmod. If compilation fails for playercode/virtch.c
