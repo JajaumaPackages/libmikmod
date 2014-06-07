@@ -1,7 +1,7 @@
 Summary:        A MOD music file player library
 Name:           libmikmod
 Version:        3.3.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv2 and LGPLv2+
 Group:          Applications/Multimedia
 URL:            http://mikmod.sourceforge.net/
@@ -78,6 +78,9 @@ fi
 
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.3.6-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Thu Mar 27 2014 Hans de Goede <hdegoede@redhat.com> - 3.3.6-2
 - Add missing requires pulseaudio-libs-devel to the -devel pkg (rhbz#1081142)
 
