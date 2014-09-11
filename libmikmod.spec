@@ -1,7 +1,7 @@
 Summary:        A MOD music file player library
 Name:           libmikmod
-Version:        3.3.6
-Release:        4%{?dist}
+Version:        3.3.7
+Release:        1%{?dist}
 License:        GPLv2 and LGPLv2+
 Group:          Applications/Multimedia
 URL:            http://mikmod.sourceforge.net/
@@ -78,6 +78,9 @@ fi
 
 
 %changelog
+* Wed Sep 10 2014 Hans de Goede <hdegoede@redhat.com> - 3.3.7-1
+- New upstream release 3.3.7 (rhbz#1139002)
+
 * Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.3.6-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 

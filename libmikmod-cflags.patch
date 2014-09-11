@@ -1,7 +1,7 @@
-diff -up libmikmod-3.3.6/configure~ libmikmod-3.3.6/configure
---- libmikmod-3.3.6/configure~	2014-03-20 21:20:14.000000000 +0100
-+++ libmikmod-3.3.6/configure	2014-03-22 12:31:05.508979340 +0100
-@@ -15836,79 +15836,6 @@ $as_echo "#define HAVE_RTLD_GLOBAL 1" >>
+diff -up libmikmod-3.3.7/configure~ libmikmod-3.3.7/configure
+--- libmikmod-3.3.7/configure~	2014-08-31 09:56:01.000000000 +0200
++++ libmikmod-3.3.7/configure	2014-09-10 16:46:57.039692782 +0200
+@@ -16298,81 +16298,6 @@ $as_echo "#define HAVE_RTLD_GLOBAL 1" >>
  	fi
  fi
  
@@ -15,14 +15,15 @@ diff -up libmikmod-3.3.6/configure~ libmikmod-3.3.6/configure
 -	# to work correctly depending of the compiler version.
 -	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if inlining functions is safe" >&5
 -$as_echo_n "checking if inlining functions is safe... " >&6; }
--if ${libmikmod_cv_gcc_inline_safe+:} false; then :
+-if ${libmikmod_cv_gcc_inline_safe+:} false
+-then :
 -  $as_echo_n "(cached) " >&6
 -else
 -  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 -/* end confdefs.h.  */
 -
 -int
--main ()
+-main (void)
 -{
 -
 -#if !(defined __GNUC__ && (__GNUC__ > 2 || __GNUC__ == 2 && __GNUC_MINOR__ > 7))
@@ -33,7 +34,8 @@ diff -up libmikmod-3.3.6/configure~ libmikmod-3.3.6/configure
 -  return 0;
 -}
 -_ACEOF
--if ac_fn_c_try_compile "$LINENO"; then :
+-if ac_fn_c_try_compile "$LINENO"
+-then :
 -  libmikmod_cv_gcc_inline_safe=yes
 -else
 -  libmikmod_cv_gcc_inline_safe=no
