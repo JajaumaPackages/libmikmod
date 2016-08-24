@@ -10,7 +10,7 @@ diff -up libmikmod-3.3.7/include/mikmod.h~ libmikmod-3.3.7/include/mikmod.h
 +#if __WORDSIZE == 64
          /* 64 bit architectures: */
  typedef signed int         SLONG;
- #if !(defined(_WIN32) || defined(__AROS__))
+ #if !(defined(_WIN32) || defined(_MIKMOD_AMIGA))
 diff -up libmikmod-3.3.7/include/mikmod_internals.h~ libmikmod-3.3.7/include/mikmod_internals.h
 --- libmikmod-3.3.7/include/mikmod_internals.h~	2014-07-15 09:50:00.000000000 +0200
 +++ libmikmod-3.3.7/include/mikmod_internals.h	2014-09-10 16:42:55.969362911 +0200
