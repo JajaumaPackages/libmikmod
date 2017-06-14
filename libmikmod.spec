@@ -1,9 +1,8 @@
 Summary:        A MOD music file player library
 Name:           libmikmod
-Version:        3.3.10
-Release:        2%{?dist}
+Version:        3.3.11
+Release:        1%{?dist}
 License:        GPLv2 and LGPLv2+
-Group:          Applications/Multimedia
 URL:            http://mikmod.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/mikmod/libmikmod-%{version}.tar.gz
 Patch0:         libmikmod-64bit.patch
@@ -16,9 +15,7 @@ libmikmod is a library used by the mikmod MOD music file player for
 UNIX-like systems. Supported file formats include MOD, STM, S3M, MTM,
 XM, ULT and IT.
 
-
 %package devel
-Group:          Development/Libraries
 Summary:        Header files and documentation for compiling mikmod applications
 Provides:       mikmod-devel = %{version}-%{release}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -30,29 +27,20 @@ Requires(preun): info
 This package includes the header files you will need to compile
 applications for mikmod.
 
-
 %prep
-%setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-
+%autosetup -p1
 
 %build
 %configure --enable-dl --enable-alsa --disable-simd
-make %{?_smp_flags}
-
+%make_build
 
 %install
-make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
-rm -f $RPM_BUILD_ROOT%{_infodir}/dir $RPM_BUILD_ROOT%{_libdir}/*.a
-find $RPM_BUILD_ROOT | grep "\\.la$" | xargs rm -f
-
+%make_install INSTALL="install -p"
+rm -f %{buildroot}%{_infodir}/dir %{buildroot}%{_libdir}/*.a
+find %{buildroot} -name '*.la' -print -delete
 
 %post -p /sbin/ldconfig
-
 %postun -p /sbin/ldconfig
-
 
 %post devel
 /sbin/install-info %{_infodir}/mikmod.info %{_infodir}/dir || :
@@ -62,23 +50,24 @@ if [ $1 = 0 ] ; then
   /sbin/install-info --delete %{_infodir}/mikmod.info %{_infodir}/dir || :
 fi
 
-
 %files
 %doc AUTHORS NEWS README TODO
 %license COPYING.LIB COPYING.LESSER
-%{_libdir}/*.so.*
+%{_libdir}/libmikmod.so.3*
 
 %files devel
-%{_bindir}/*-config
-%{_libdir}/*.so
+%{_bindir}/%{name}-config
+%{_libdir}/%{name}.so
 %{_libdir}/pkgconfig/%{name}.pc
-%{_datadir}/aclocal/*
-%{_includedir}/*
-%{_infodir}/mikmod*
-%{_mandir}/man1/libmikmod-config*
-
+%{_datadir}/aclocal/%{name}.m4
+%{_includedir}/mikmod.h
+%{_infodir}/mikmod.info*
+%{_mandir}/man1/%{name}-config*
 
 %changelog
+* Wed Jun 14 2017 Igor Gnatenko <ignatenko@redhat.com> - 3.3.11-1
+- Update to 3.3.11
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 3.3.10-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
